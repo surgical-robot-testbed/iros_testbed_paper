@@ -3,45 +3,518 @@
 <head>
   <meta charset="utf-8">
   <meta name="description"
-        content="Deformable Neural Radiance Fields creates free-viewpoint portraits (nerfies) from casually captured videos.">
-  <meta name="keywords" content="Nerfies, D-NeRF, NeRF">
+        content="An open-source, robot-agnostic Remote Center of Motion controller for autonomous surgical robotics, validated across phantom, ex vivo, and in vivo laparoscopic procedures.">
+  <meta name="keywords" content="Surgical Robotics, Remote Center of Motion, RCM, Imitation Learning, Autonomous Surgery, Laparoscopy, UR5e">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Nerfies: Deformable Neural Radiance Fields</title>
-
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-
-    function gtag() {
-      dataLayer.push(arguments);
-    }
-
-    gtag('js', new Date());
-
-    gtag('config', 'G-PYVRSFMDRL');
-  </script>
+  <title>Open-Source Analytical RCM Controller for Autonomous Surgical Robotics</title>
 
   <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
         rel="stylesheet">
 
-  <link rel="stylesheet" href="./static/css/bulma.min.css">
-  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
-  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
-  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
-  <link rel="stylesheet" href="./static/css/index.css">
-  <link rel="icon" href="./static/images/favicon.svg">
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script defer src="./static/js/fontawesome.all.min.js"></script>
-  <script src="./static/js/bulma-carousel.min.js"></script>
-  <script src="./static/js/bulma-slider.min.js"></script>
-  <script src="./static/js/index.js"></script>
+  <style>
+    :root {
+      --primary: #0a6e5c;
+      --primary-light: #e8f5f1;
+      --accent: #d4563a;
+      --text: #2c3e50;
+      --text-light: #5a6c7d;
+      --bg-light: #f7faf9;
+      --bg-hero: #f0f7f5;
+    }
+
+    body {
+      font-family: 'Noto Sans', sans-serif;
+      color: var(--text);
+    }
+
+    .publication-title {
+      font-family: 'Google Sans', sans-serif;
+      font-weight: 700;
+      color: var(--text);
+      font-size: 2.2rem !important;
+      line-height: 1.25;
+    }
+
+    .publication-authors {
+      font-family: 'Noto Sans', sans-serif;
+    }
+
+    .publication-authors a {
+      color: var(--primary);
+    }
+
+    .publication-authors a:hover {
+      text-decoration: underline;
+    }
+
+    .publication-links .button {
+      margin: 4px;
+      border-color: #363636;
+    }
+
+    .hero-body-custom {
+      padding: 3rem 1.5rem 2rem;
+      background: var(--bg-hero);
+      border-bottom: 1px solid #e0ece8;
+    }
+
+    .section {
+      padding: 3rem 1.5rem;
+    }
+
+    .section-divider {
+      width: 60px;
+      height: 3px;
+      background: var(--primary);
+      margin: 0 auto 1.5rem;
+      border-radius: 2px;
+    }
+
+    h2.title.is-3 {
+      font-family: 'Google Sans', sans-serif;
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    h3.title.is-4 {
+      font-family: 'Google Sans', sans-serif;
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    .content p, .content li {
+      color: var(--text);
+      line-height: 1.75;
+    }
+
+    /* Teaser figure */
+    .teaser-figure {
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 8px 30px rgba(10, 110, 92, 0.1);
+      border: 1px solid #e0ece8;
+    }
+
+    .teaser-figure img,
+    .teaser-figure video {
+      width: 100%;
+      display: block;
+    }
+
+    .teaser-caption {
+      font-size: 0.95rem;
+      color: var(--text-light);
+      margin-top: 1rem;
+      text-align: center;
+      line-height: 1.6;
+    }
+
+    /* Environment cards */
+    .env-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+
+    .env-card {
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      border: 1px solid #e8ede8;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .env-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+    }
+
+    .env-card .card-image {
+      width: 100%;
+      height: 220px;
+      background: #e0e0e0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #999;
+      font-size: 0.9rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .env-card .card-image.phantom { background: linear-gradient(135deg, #e8f5f1 0%, #d0ebe4 100%); }
+    .env-card .card-image.exvivo { background: linear-gradient(135deg, #fdf2e9 0%, #f5dcc3 100%); }
+    .env-card .card-image.invivo { background: linear-gradient(135deg, #fdecea 0%, #f5c6c2 100%); }
+
+    .env-card .card-image .placeholder-icon {
+      font-size: 3rem;
+      opacity: 0.3;
+    }
+
+    .env-card .card-body {
+      padding: 1.25rem;
+    }
+
+    .env-card .card-body h4 {
+      font-family: 'Google Sans', sans-serif;
+      font-weight: 600;
+      font-size: 1.05rem;
+      margin-bottom: 0.4rem;
+      color: var(--text);
+    }
+
+    .env-card .card-body p {
+      font-size: 0.88rem;
+      color: var(--text-light);
+      line-height: 1.5;
+    }
+
+    .env-label {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: rgba(255,255,255,0.92);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text);
+      backdrop-filter: blur(4px);
+    }
+
+    /* Results figures */
+    .result-figure {
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+      border: 1px solid #eee;
+      background: white;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .result-figure img {
+      width: 100%;
+      display: block;
+    }
+
+    .result-figure .fig-caption {
+      font-size: 0.88rem;
+      color: var(--text-light);
+      margin-top: 1rem;
+      line-height: 1.6;
+      border-top: 1px solid #f0f0f0;
+      padding-top: 1rem;
+    }
+
+    .result-figure .fig-caption strong {
+      color: var(--text);
+    }
+
+    /* Method diagram */
+    .method-figure {
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+      border: 1px solid #eee;
+      background: white;
+      padding: 1rem;
+    }
+
+    .method-figure img {
+      width: 100%;
+      display: block;
+    }
+
+    /* Control modes side by side */
+    .control-modes {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin: 2rem 0;
+    }
+
+    .control-mode-card {
+      background: var(--bg-light);
+      border-radius: 12px;
+      padding: 2rem;
+      border: 1px solid #e0ece8;
+    }
+
+    .control-mode-card h4 {
+      font-family: 'Google Sans', sans-serif;
+      font-weight: 600;
+      font-size: 1.05rem;
+      margin-bottom: 0.75rem;
+      color: var(--primary);
+    }
+
+    .control-mode-card .dof-list {
+      font-size: 0.9rem;
+      color: var(--text-light);
+      line-height: 1.8;
+    }
+
+    .control-mode-card .dof-list code {
+      background: rgba(10,110,92,0.08);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      color: var(--primary);
+    }
+
+    .control-mode-card .video-placeholder {
+      width: 100%;
+      height: 180px;
+      background: #e8ede8;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 1rem;
+      color: #999;
+      font-size: 0.85rem;
+    }
+
+    /* Metrics highlight */
+    .metrics-highlight {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+
+    .metric-card {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: center;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+      border: 1px solid #eee;
+    }
+
+    .metric-card .metric-value {
+      font-family: 'Google Sans', sans-serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 0.25rem;
+    }
+
+    .metric-card .metric-unit {
+      font-size: 0.85rem;
+      color: var(--text-light);
+      margin-bottom: 0.5rem;
+    }
+
+    .metric-card .metric-label {
+      font-size: 0.8rem;
+      color: var(--text-light);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Video section */
+    .publication-video {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+    }
+
+    .publication-video iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .video-placeholder-large {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    }
+
+    .video-placeholder-large .inner {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255,255,255,0.5);
+    }
+
+    .video-placeholder-large .inner i {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    /* Bibtex */
+    .bibtex-section pre {
+      background: #1a1a2e;
+      color: #a8d8c8;
+      border-radius: 10px;
+      padding: 1.5rem;
+      font-size: 0.85rem;
+      line-height: 1.6;
+      overflow-x: auto;
+    }
+
+    /* Footer */
+    .footer {
+      background: var(--bg-light);
+      border-top: 1px solid #e0ece8;
+      padding: 2rem 1.5rem;
+    }
+
+    .footer p {
+      color: var(--text-light);
+      font-size: 0.85rem;
+    }
+
+    .footer a {
+      color: var(--primary);
+    }
+
+    /* Navbar */
+    .navbar {
+      background: white;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+
+    .navbar-item {
+      font-family: 'Google Sans', sans-serif;
+      color: var(--text);
+    }
+
+    /* Contribution list */
+    .contribution-list {
+      list-style: none;
+      padding: 0;
+      margin: 1.5rem 0;
+    }
+
+    .contribution-list li {
+      position: relative;
+      padding-left: 2rem;
+      margin-bottom: 1rem;
+      line-height: 1.65;
+      font-size: 0.95rem;
+    }
+
+    .contribution-list li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 8px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--primary);
+    }
+
+    /* RCM geometry diagram placeholder */
+    .rcm-diagram {
+      width: 100%;
+      max-width: 500px;
+      margin: 2rem auto;
+      background: var(--bg-light);
+      border-radius: 12px;
+      border: 1px solid #e0ece8;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .rcm-diagram svg {
+      width: 100%;
+      max-width: 400px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .publication-title {
+        font-size: 1.5rem !important;
+      }
+      .env-cards {
+        grid-template-columns: 1fr;
+      }
+      .control-modes {
+        grid-template-columns: 1fr;
+      }
+      .metrics-highlight {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Policy rollout carousel */
+    .rollout-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+
+    .rollout-card {
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+      border: 1px solid #eee;
+    }
+
+    .rollout-card .rollout-video {
+      width: 100%;
+      height: 200px;
+      background: #1a1a2e;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255,255,255,0.4);
+    }
+
+    .rollout-card .rollout-info {
+      padding: 1rem;
+      background: white;
+    }
+
+    .rollout-card .rollout-info h5 {
+      font-family: 'Google Sans', sans-serif;
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .rollout-card .rollout-info span {
+      font-size: 0.82rem;
+      color: var(--text-light);
+    }
+
+    @media (max-width: 768px) {
+      .rollout-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
 <body>
 
+<!-- Navbar -->
 <nav class="navbar" role="navigation" aria-label="main navigation">
   <div class="navbar-brand">
     <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
@@ -52,433 +525,445 @@
   </div>
   <div class="navbar-menu">
     <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
-      <a class="navbar-item" href="https://keunhong.com">
-      <span class="icon">
-          <i class="fas fa-home"></i>
-      </span>
+      <!-- Add lab homepage link here -->
+      <a class="navbar-item" href="#">
+        <span class="icon"><i class="fas fa-home"></i></span>
       </a>
-
       <div class="navbar-item has-dropdown is-hoverable">
-        <a class="navbar-link">
-          More Research
-        </a>
+        <a class="navbar-link">More Research</a>
         <div class="navbar-dropdown">
-          <a class="navbar-item" href="https://hypernerf.github.io">
-            HyperNeRF
-          </a>
-          <a class="navbar-item" href="https://nerfies.github.io">
-            Nerfies
-          </a>
-          <a class="navbar-item" href="https://latentfusion.github.io">
-            LatentFusion
-          </a>
-          <a class="navbar-item" href="https://photoshape.github.io">
-            PhotoShape
-          </a>
+          <a class="navbar-item" href="#">Redacted for review</a>
         </div>
       </div>
     </div>
-
   </div>
 </nav>
 
-
+<!-- Hero / Title -->
 <section class="hero">
-  <div class="hero-body">
+  <div class="hero-body hero-body-custom">
     <div class="container is-max-desktop">
       <div class="columns is-centered">
         <div class="column has-text-centered">
-          <h1 class="title is-1 publication-title">Nerfies: Deformable Neural Radiance Fields</h1>
-          <div class="is-size-5 publication-authors">
-            <span class="author-block">
-              <a href="https://keunhong.com">Keunhong Park</a><sup>1</sup>,</span>
-            <span class="author-block">
-              <a href="https://utkarshsinha.com">Utkarsh Sinha</a><sup>2</sup>,</span>
-            <span class="author-block">
-              <a href="https://jonbarron.info">Jonathan T. Barron</a><sup>2</sup>,
-            </span>
-            <span class="author-block">
-              <a href="http://sofienbouaziz.com">Sofien Bouaziz</a><sup>2</sup>,
-            </span>
-            <span class="author-block">
-              <a href="https://www.danbgoldman.com">Dan B Goldman</a><sup>2</sup>,
-            </span>
-            <span class="author-block">
-              <a href="https://homes.cs.washington.edu/~seitz/">Steven M. Seitz</a><sup>1,2</sup>,
-            </span>
-            <span class="author-block">
-              <a href="http://www.ricardomartinbrualla.com">Ricardo Martin-Brualla</a><sup>2</sup>
-            </span>
+          <h1 class="title is-1 publication-title">
+            An Open-Source Analytical Remote-Center-of-Motion Controller for Autonomous Surgical Robotics
+          </h1>
+
+          <div class="is-size-5 publication-authors" style="margin-top:1rem;">
+            <span class="author-block" style="color: var(--text-light); font-style: italic;">Authors redacted for blind review</span>
           </div>
 
-          <div class="is-size-5 publication-authors">
-            <span class="author-block"><sup>1</sup>University of Washington,</span>
-            <span class="author-block"><sup>2</sup>Google Research</span>
+          <div class="is-size-6 publication-authors" style="margin-top:0.5rem; color: var(--text-light);">
+            <span class="author-block" style="font-style: italic;">Affiliations redacted for blind review</span>
           </div>
 
-          <div class="column has-text-centered">
+          <!-- Links -->
+          <div class="column has-text-centered" style="margin-top:1rem;">
             <div class="publication-links">
-              <!-- PDF Link. -->
               <span class="link-block">
-                <a href="https://arxiv.org/pdf/2011.12948"
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="fas fa-file-pdf"></i>
-                  </span>
+                <a href="#" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="fas fa-file-pdf"></i></span>
                   <span>Paper</span>
                 </a>
               </span>
               <span class="link-block">
-                <a href="https://arxiv.org/abs/2011.12948"
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="ai ai-arxiv"></i>
-                  </span>
+                <a href="#" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="ai ai-arxiv"></i></span>
                   <span>arXiv</span>
                 </a>
               </span>
-              <!-- Video Link. -->
               <span class="link-block">
-                <a href="https://www.youtube.com/watch?v=MrKrnHhk8IA"
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="fab fa-youtube"></i>
-                  </span>
+                <a href="#" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="fab fa-youtube"></i></span>
                   <span>Video</span>
                 </a>
               </span>
-              <!-- Code Link. -->
               <span class="link-block">
-                <a href="https://github.com/google/nerfies"
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="fab fa-github"></i>
-                  </span>
+                <a href="#" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="fab fa-github"></i></span>
                   <span>Code</span>
-                  </a>
+                </a>
               </span>
-              <!-- Dataset Link. -->
-              <span class="link-block">
-                <a href="https://github.com/google/nerfies/releases/tag/0.1"
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="far fa-images"></i>
-                  </span>
-                  <span>Data</span>
-                  </a>
+
             </div>
-
           </div>
+
         </div>
       </div>
     </div>
   </div>
 </section>
 
+<!-- Teaser -->
 <section class="hero teaser">
-  <div class="container is-max-desktop">
-    <div class="hero-body">
-      <video id="teaser" autoplay muted loop playsinline height="100%">
-        <source src="./static/videos/teaser.mp4"
-                type="video/mp4">
-      </video>
-      <h2 class="subtitle has-text-centered">
-        <span class="dnerf">Nerfies</span> turns selfie videos from your phone into
-        free-viewpoint
-        portraits.
-      </h2>
-    </div>
-  </div>
-</section>
-
-
-<section class="hero is-light is-small">
-  <div class="hero-body">
-    <div class="container">
-      <div id="results-carousel" class="carousel results-carousel">
-        <div class="item item-steve">
-          <video poster="" id="steve" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/steve.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-chair-tp">
-          <video poster="" id="chair-tp" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/chair-tp.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-shiba">
-          <video poster="" id="shiba" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/shiba.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-fullbody">
-          <video poster="" id="fullbody" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/fullbody.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-blueshirt">
-          <video poster="" id="blueshirt" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/blueshirt.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-mask">
-          <video poster="" id="mask" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/mask.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-coffee">
-          <video poster="" id="coffee" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/coffee.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-toby">
-          <video poster="" id="toby" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/toby2.mp4"
-                    type="video/mp4">
-          </video>
+  <div class="container is-max-desktop" style="padding: 2rem 1.5rem;">
+    <div class="teaser-figure">
+      <!-- Replace with actual teaser image: composite of phantom | ex vivo | in vivo setup -->
+      <div style="width:100%; height:400px; background: linear-gradient(135deg, #e8f5f1 0%, #d0ebe4 50%, #fdf2e9 100%); display:flex; align-items:center; justify-content:center; color:#999; font-size:0.95rem;">
+        <div style="text-align:center;">
+          <i class="fas fa-robot" style="font-size:4rem; opacity:0.2; display:block; margin-bottom:1rem;"></i>
+          Teaser figure: UR5e platform across phantom | <em>ex vivo</em> | <em>in vivo</em> environments
         </div>
       </div>
     </div>
+    <p class="teaser-caption">
+      Our open-source surgical robotics platform built around industrial manipulators and an analytical RCM controller,
+      validated across <strong>phantom</strong>, <strong><em>ex vivo</em></strong>, and <strong><em>in vivo</em></strong> porcine laparoscopic procedures.
+      The controller operates in Cartesian space, enabling <em>any</em> industrial manipulator to function as a surgical robot.
+    </p>
   </div>
 </section>
 
-
+<!-- Abstract -->
 <section class="section">
   <div class="container is-max-desktop">
-    <!-- Abstract. -->
     <div class="columns is-centered has-text-centered">
       <div class="column is-four-fifths">
         <h2 class="title is-3">Abstract</h2>
+        <div class="section-divider"></div>
         <div class="content has-text-justified">
           <p>
-            We present the first method capable of photorealistically reconstructing a non-rigidly
-            deforming scene using photos/videos captured casually from mobile phones.
+            Autonomous robot-assisted surgery demands reliable, high-precision platforms that strictly adhere to the safety and kinematic constraints of minimally invasive procedures. Existing research platforms, primarily based on the da Vinci Research Kit, suffer from cable-driven mechanical limitations that degrade state-space consistency and hinder the downstream training of reliable autonomous policies.
           </p>
           <p>
-            Our approach augments neural radiance fields
-            (NeRF) by optimizing an
-            additional continuous volumetric deformation field that warps each observed point into a
-            canonical 5D NeRF.
-            We observe that these NeRF-like deformation fields are prone to local minima, and
-            propose a coarse-to-fine optimization method for coordinate-based models that allows for
-            more robust optimization.
-            By adapting principles from geometry processing and physical simulation to NeRF-like
-            models, we propose an elastic regularization of the deformation field that further
-            improves robustness.
+            We present an open-source, robot-agnostic Remote Center of Motion (RCM) controller based on a closed-form analytical velocity solver that enforces the trocar constraint deterministically without iterative optimization. The controller operates in Cartesian space, enabling any industrial manipulator to function as a surgical robot. We integrate it into a full-stack ROS-based surgical robotics platform supporting teleoperation, demonstration recording, and deployment of learned policies via a decoupled server–client architecture. We provide implementations for the UR5e and Franka Emika Panda manipulators, and integrate stereoscopic 3D perception.
           </p>
           <p>
-            We show that <span class="dnerf">Nerfies</span> can turn casually captured selfie
-            photos/videos into deformable NeRF
-            models that allow for photorealistic renderings of the subject from arbitrary
-            viewpoints, which we dub <i>"nerfies"</i>. We evaluate our method by collecting data
-            using a
-            rig with two mobile phones that take time-synchronized photos, yielding train/validation
-            images of the same pose at different viewpoints. We show that our method faithfully
-            reconstructs non-rigidly deforming scenes and reproduces unseen views with high
-            fidelity.
+            We validate the system on a bowel grasping and retraction task across phantom, <em>ex vivo</em>, and <em>in vivo</em> porcine laparoscopic procedures. RCM deviations remain sub-millimeter across all conditions, and trajectory smoothness metrics (SPARC, LDLJ) are comparable to expert demonstrations from the JIGSAWS benchmark recorded on the da Vinci system. These results demonstrate that the platform provides the precision and robustness required for teleoperation, data collection and autonomous policy deployment in realistic surgical scenarios.
           </p>
         </div>
       </div>
     </div>
-    <!--/ Abstract. -->
+  </div>
+</section>
 
-    <!-- Paper video. -->
+<!-- Video -->
+<section class="section" style="background: var(--bg-light);">
+  <div class="container is-max-desktop">
     <div class="columns is-centered has-text-centered">
       <div class="column is-four-fifths">
         <h2 class="title is-3">Video</h2>
+        <div class="section-divider"></div>
+        <div class="video-placeholder-large">
+          <div class="inner">
+            <i class="fas fa-play-circle"></i>
+            <span>Platform demo video coming soon</span>
+          </div>
+        </div>
+        <!-- Replace with actual video embed:
         <div class="publication-video">
-          <iframe src="https://www.youtube.com/embed/MrKrnHhk8IA?rel=0&amp;showinfo=0"
+          <iframe src="https://www.youtube.com/embed/YOUR_VIDEO_ID?rel=0&showinfo=0"
                   frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
         </div>
+        -->
       </div>
     </div>
-    <!--/ Paper video. -->
   </div>
 </section>
 
-
+<!-- System Overview / Architecture -->
 <section class="section">
   <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">System Architecture</h2>
+    <div class="section-divider"></div>
 
-    <div class="columns is-centered">
-
-      <!-- Visual Effects. -->
-      <div class="column">
-        <div class="content">
-          <h2 class="title is-3">Visual Effects</h2>
-          <p>
-            Using <i>nerfies</i> you can create fun visual effects. This Dolly zoom effect
-            would be impossible without nerfies since it would require going through a wall.
-          </p>
-          <video id="dollyzoom" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/dollyzoom-stacked.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-      </div>
-      <!--/ Visual Effects. -->
-
-      <!-- Matting. -->
-      <div class="column">
-        <h2 class="title is-3">Matting</h2>
-        <div class="columns is-centered">
-          <div class="column content">
-            <p>
-              As a byproduct of our method, we can also solve the matting problem by ignoring
-              samples that fall outside of a bounding box during rendering.
-            </p>
-            <video id="matting-video" controls playsinline height="100%">
-              <source src="./static/videos/matting.mp4"
-                      type="video/mp4">
-            </video>
-          </div>
-
+    <div class="method-figure">
+      <!-- Replace with actual system overview figure -->
+      <div style="width:100%; height:350px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); display:flex; align-items:center; justify-content:center; color:#999; font-size:0.9rem; border-radius:8px;">
+        <div style="text-align:center;">
+          <i class="fas fa-project-diagram" style="font-size:3rem; opacity:0.2; display:block; margin-bottom:1rem;"></i>
+          System overview figure (Fig. 1): ROS architecture with teleoperation, recording, and policy deployment modules
         </div>
       </div>
     </div>
-    <!--/ Matting. -->
+    <p style="font-size:0.9rem; color:var(--text-light); text-align:center; margin-top:1rem; line-height:1.6;">
+      <strong>Figure 1.</strong> Full-stack ROS-based architecture. The modular design decouples input devices, the RCM controller, data recording, and policy inference, allowing each component to be independently replaced or extended.
+    </p>
 
-    <!-- Animation. -->
-    <div class="columns is-centered">
-      <div class="column is-full-width">
-        <h2 class="title is-3">Animation</h2>
-
-        <!-- Interpolating. -->
-        <h3 class="title is-4">Interpolating states</h3>
-        <div class="content has-text-justified">
-          <p>
-            We can also animate the scene by interpolating the deformation latent codes of two input
-            frames. Use the slider here to linearly interpolate between the left frame and the right
-            frame.
-          </p>
-        </div>
-        <div class="columns is-vcentered interpolation-panel">
-          <div class="column is-3 has-text-centered">
-            <img src="./static/images/interpolate_start.jpg"
-                 class="interpolation-image"
-                 alt="Interpolate start reference image."/>
-            <p>Start Frame</p>
-          </div>
-          <div class="column interpolation-video-column">
-            <div id="interpolation-image-wrapper">
-              Loading...
-            </div>
-            <input class="slider is-fullwidth is-large is-info"
-                   id="interpolation-slider"
-                   step="1" min="0" max="100" value="0" type="range">
-          </div>
-          <div class="column is-3 has-text-centered">
-            <img src="./static/images/interpolate_end.jpg"
-                 class="interpolation-image"
-                 alt="Interpolation end reference image."/>
-            <p class="is-bold">End Frame</p>
-          </div>
-        </div>
-        <br/>
-        <!--/ Interpolating. -->
-
-        <!-- Re-rendering. -->
-        <h3 class="title is-4">Re-rendering the input video</h3>
-        <div class="content has-text-justified">
-          <p>
-            Using <span class="dnerf">Nerfies</span>, you can re-render a video from a novel
-            viewpoint such as a stabilized camera by playing back the training deformations.
-          </p>
-        </div>
-        <div class="content has-text-centered">
-          <video id="replay-video"
-                 controls
-                 muted
-                 preload
-                 playsinline
-                 width="75%">
-            <source src="./static/videos/replay.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <!--/ Re-rendering. -->
-
-      </div>
+    <div class="content has-text-justified" style="margin-top:2rem;">
+      <p>
+        The platform is built on the Robot Operating System (ROS), decomposing the control software into independent nodes for teleoperation, robot control, data recording, and policy inference. The RCM controller operates entirely in Cartesian space, making it agnostic to the specific manipulator hardware—any robot arm capable of executing Cartesian velocity commands can be used. We currently provide implementations for the <strong>Universal Robots UR5e</strong> and <strong>Franka Emika Panda</strong>.
+      </p>
+      <p>
+        For policy deployment, inference is decoupled from ROS using a <strong>ZMQ-based server–client architecture</strong>. A model server aggregates observations, forwards them to the policy, and relays predicted actions back through a safety controller. This design is environment-agnostic: any imitation learning or reinforcement learning policy can serve as the client, enabling rollouts across hardware and simulation without modifying the infrastructure.
+      </p>
     </div>
-    <!--/ Animation. -->
+  </div>
+</section>
 
+<!-- RCM Controller -->
+<section class="section" style="background: var(--bg-light);">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Analytical RCM Controller</h2>
+    <div class="section-divider"></div>
 
-    <!-- Concurrent Work. -->
-    <div class="columns is-centered">
-      <div class="column is-full-width">
-        <h2 class="title is-3">Related Links</h2>
+    <div class="content has-text-justified">
+      <p>
+        The Remote Center of Motion (RCM) constraint requires that the instrument shaft always pivots about a fixed point at the trocar insertion site. Unlike optimization-based approaches (e.g., Quadratic Programming), our controller enforces this constraint analytically via closed-form vector algebra, yielding deterministic, smooth velocity profiles without iterative solvers.
+      </p>
+    </div>
 
-        <div class="content has-text-justified">
-          <p>
-            There's a lot of excellent work that was introduced around the same time as ours.
-          </p>
-          <p>
-            <a href="https://arxiv.org/abs/2104.09125">Progressive Encoding for Neural Optimization</a> introduces an idea similar to our windowed position encoding for coarse-to-fine optimization.
-          </p>
-          <p>
-            <a href="https://www.albertpumarola.com/research/D-NeRF/index.html">D-NeRF</a> and <a href="https://gvv.mpi-inf.mpg.de/projects/nonrigid_nerf/">NR-NeRF</a>
-            both use deformation fields to model non-rigid scenes.
-          </p>
-          <p>
-            Some works model videos with a NeRF by directly modulating the density, such as <a href="https://video-nerf.github.io/">Video-NeRF</a>, <a href="https://www.cs.cornell.edu/~zl548/NSFF/">NSFF</a>, and <a href="https://neural-3d-video.github.io/">DyNeRF</a>
-          </p>
-          <p>
-            There are probably many more by the time you are reading this. Check out <a href="https://dellaert.github.io/NeRF/">Frank Dellart's survey on recent NeRF papers</a>, and <a href="https://github.com/yenchenlin/awesome-NeRF">Yen-Chen Lin's curated list of NeRF papers</a>.
-          </p>
+    <!-- RCM Geometry Diagram -->
+    <div class="rcm-diagram">
+      <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+        <!-- Robot arm (simplified) -->
+        <line x1="50" y1="280" x2="120" y2="200" stroke="#ccc" stroke-width="8" stroke-linecap="round"/>
+        <line x1="120" y1="200" x2="200" y2="140" stroke="#ccc" stroke-width="8" stroke-linecap="round"/>
+
+        <!-- End effector -->
+        <circle cx="200" cy="140" r="8" fill="var(--primary)" opacity="0.8"/>
+        <text x="215" y="138" font-size="12" fill="var(--text-light)" font-family="Google Sans">p_ee</text>
+
+        <!-- Shaft line through RCM -->
+        <line x1="200" y1="140" x2="300" y2="50" stroke="var(--accent)" stroke-width="3" stroke-dasharray="6,3"/>
+
+        <!-- RCM point -->
+        <circle cx="240" cy="102" r="10" fill="none" stroke="var(--accent)" stroke-width="2.5"/>
+        <circle cx="240" cy="102" r="3" fill="var(--accent)"/>
+        <text x="255" y="100" font-size="12" fill="var(--accent)" font-weight="600" font-family="Google Sans">RCM</text>
+
+        <!-- Trocar / body wall -->
+        <rect x="220" y="88" width="40" height="8" rx="2" fill="#ddd" opacity="0.6" transform="rotate(-35, 240, 92)"/>
+
+        <!-- Tip -->
+        <circle cx="300" cy="50" r="6" fill="var(--primary)"/>
+        <text x="310" y="53" font-size="12" fill="var(--text-light)" font-family="Google Sans">p_tip</text>
+
+        <!-- Vectors -->
+        <defs>
+          <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="var(--primary)"/>
+          </marker>
+        </defs>
+
+        <!-- r_ee vector -->
+        <line x1="200" y1="140" x2="235" y2="107" stroke="var(--primary)" stroke-width="1.5" marker-end="url(#arrowhead)" opacity="0.6"/>
+        <text x="195" y="120" font-size="10" fill="var(--primary)" font-family="Google Sans" font-style="italic">r_ee</text>
+
+        <!-- r_shaft vector -->
+        <line x1="240" y1="102" x2="293" y2="56" stroke="var(--primary)" stroke-width="1.5" marker-end="url(#arrowhead)" opacity="0.6"/>
+        <text x="275" y="85" font-size="10" fill="var(--primary)" font-family="Google Sans" font-style="italic">r_shaft</text>
+
+        <!-- Pivot arc -->
+        <path d="M 280 70 A 50 50 0 0 1 260 55" fill="none" stroke="var(--text-light)" stroke-width="1" stroke-dasharray="3,2"/>
+        <text x="275" y="44" font-size="9" fill="var(--text-light)" font-family="Google Sans">ω_pivot</text>
+
+        <!-- Legend -->
+        <text x="50" y="25" font-size="11" fill="var(--text)" font-family="Google Sans" font-weight="600">RCM Geometry</text>
+      </svg>
+    </div>
+
+    <!-- Two control modes -->
+    <div class="control-modes">
+      <div class="control-mode-card">
+        <h4><i class="fas fa-arrows-alt" style="margin-right:0.5rem;"></i>Cartesian Tip Control</h4>
+        <div class="dof-list">
+          Input: desired tip velocity <code>v_tip</code> + shaft roll <code>ω_roll</code><br><br>
+          Moves the instrument tip in 3D Cartesian space inside the patient body while maintaining the RCM constraint. Ideal for teleoperation and policy deployment.
+        </div>
+        <div class="video-placeholder">
+          <i class="fas fa-play-circle" style="margin-right:0.5rem;"></i> Animation placeholder
         </div>
       </div>
+      <div class="control-mode-card">
+        <h4><i class="fas fa-compass" style="margin-right:0.5rem;"></i>Spherical Coordinate Control</h4>
+        <div class="dof-list">
+          Input: <code>ω_pitch</code>, <code>ω_yaw</code>, <code>ω_roll</code>, <code>v_trans</code><br><br>
+          Directly maps to the surgical degrees of freedom: up/down pivoting, left/right pivoting, instrument roll, and insertion depth.
+        </div>
+        <div class="video-placeholder">
+          <i class="fas fa-play-circle" style="margin-right:0.5rem;"></i> Animation placeholder
+        </div>
+      </div>
     </div>
-    <!--/ Concurrent Work. -->
 
   </div>
 </section>
 
+<!-- Experimental Environments -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Experimental Environments</h2>
+    <div class="section-divider"></div>
 
+    <p class="has-text-centered" style="color: var(--text-light); margin-bottom: 1.5rem;">
+      We validate the platform across three increasingly realistic laparoscopic environments on a bowel grasping and retraction task.
+    </p>
+
+    <div class="env-cards">
+      <div class="env-card">
+        <div class="card-image phantom">
+          <span class="env-label">Phantom</span>
+          <i class="fas fa-cube placeholder-icon"></i>
+        </div>
+        <div class="card-body">
+          <h4>Phantom Tissue</h4>
+          <p>Controlled bench-top environment with synthetic tissue models for repeatable data collection and initial policy training.</p>
+        </div>
+      </div>
+      <div class="env-card">
+        <div class="card-image exvivo">
+          <span class="env-label">Ex Vivo</span>
+          <i class="fas fa-hand-holding-medical placeholder-icon"></i>
+        </div>
+        <div class="card-body">
+          <h4><em>Ex Vivo</em> Porcine</h4>
+          <p>Cadaveric porcine tissue providing realistic tissue mechanics and visual appearance without the complexity of a live procedure.</p>
+        </div>
+      </div>
+      <div class="env-card">
+        <div class="card-image invivo">
+          <span class="env-label">In Vivo</span>
+          <i class="fas fa-heartbeat placeholder-icon"></i>
+        </div>
+        <div class="card-body">
+          <h4><em>In Vivo</em> Porcine</h4>
+          <p>Live porcine laparoscopic procedures with full physiological conditions including breathing motion and tissue bleeding.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Key Results / Metrics -->
+<section class="section" style="background: var(--bg-light);">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Key Results</h2>
+    <div class="section-divider"></div>
+
+    <!-- Metrics cards -->
+    <div class="metrics-highlight">
+      <div class="metric-card">
+        <div class="metric-value">&lt;0.08</div>
+        <div class="metric-unit">mm median RCM deviation</div>
+        <div class="metric-label">Sub-millimeter precision across all conditions</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value">3</div>
+        <div class="metric-unit">environments validated</div>
+        <div class="metric-label">Phantom · Ex Vivo · In Vivo</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value">≥ dVRK</div>
+        <div class="metric-unit">smoothness metrics</div>
+        <div class="metric-label">Comparable to JIGSAWS da Vinci benchmark</div>
+      </div>
+    </div>
+
+    <!-- RCM Deviation -->
+    <div class="result-figure" style="margin-top:2rem;">
+      <img src="./static/images/rcm_deviation.png" alt="RCM deviation across experimental conditions" style="width:100%; border-radius:8px;">
+      <div class="fig-caption">
+        <strong>Figure 2.</strong> Remote Center of Motion deviation across experimental conditions. Mean deviation (left) and worst-case maximum deviation (right) remain sub-millimeter across all conditions, with phantom (x̃=0.035 mm), <em>ex vivo</em> (x̃=0.052 mm), and <em>in vivo</em> (x̃=0.079 mm) showing a progressive increase consistent with greater tissue interaction complexity.
+      </div>
+    </div>
+
+    <!-- Smoothness -->
+    <div class="result-figure">
+      <img src="./static/images/smoothness_comparison.png" alt="Trajectory smoothness comparison" style="width:100%; border-radius:8px;">
+      <div class="fig-caption">
+        <strong>Figure 3.</strong> Trajectory smoothness comparison using SPARC (left) and Log Dimensionless Jerk (right) metrics, where values closer to zero indicate smoother motion. Our platform produces progressively less smooth trajectories from phantom to <em>in vivo</em>, consistent with increasing task difficulty. All three conditions yield smoother trajectories than expert demonstrations from the JIGSAWS Knot Tying benchmark recorded on the da Vinci system.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Policy Rollouts -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Autonomous Policy Rollouts</h2>
+    <div class="section-divider"></div>
+
+    <div class="content has-text-justified">
+      <p>
+        We validate the full pipeline by training downstream imitation learning policies (Action Chunking Transformer) on demonstrations collected with our platform and deploying them autonomously across all three environments. The decoupled server–client architecture enables seamless rollouts with a safety controller validating all predicted actions before execution.
+      </p>
+    </div>
+
+    <div class="rollout-grid">
+      <div class="rollout-card">
+        <div class="rollout-video">
+          <i class="fas fa-play-circle" style="font-size:2rem;"></i>
+        </div>
+        <div class="rollout-info">
+          <h5>Bowel Grasping &amp; Retraction</h5>
+          <span>Phantom — Autonomous rollout</span>
+        </div>
+      </div>
+      <div class="rollout-card">
+        <div class="rollout-video">
+          <i class="fas fa-play-circle" style="font-size:2rem;"></i>
+        </div>
+        <div class="rollout-info">
+          <h5>Bowel Grasping &amp; Retraction</h5>
+          <span><em>Ex vivo</em> — Autonomous rollout</span>
+        </div>
+      </div>
+      <div class="rollout-card">
+        <div class="rollout-video">
+          <i class="fas fa-play-circle" style="font-size:2rem;"></i>
+        </div>
+        <div class="rollout-info">
+          <h5>Bowel Grasping &amp; Retraction</h5>
+          <span><em>In vivo</em> — Autonomous rollout</span>
+        </div>
+      </div>
+      <div class="rollout-card">
+        <div class="rollout-video">
+          <i class="fas fa-play-circle" style="font-size:2rem;"></i>
+        </div>
+        <div class="rollout-info">
+          <h5>Teleoperation Demo</h5>
+          <span>Haptic device control with 3D perception</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contributions Summary -->
+<section class="section" style="background: var(--bg-light);">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3 has-text-centered">Contributions</h2>
+        <div class="section-divider"></div>
+        <ul class="contribution-list">
+          <li>An <strong>open-source, robot-agnostic RCM controller</strong> based on a closed-form analytical solver that enforces kinematic constraints via Cartesian velocities, ensuring deterministic execution without iterative optimization.</li>
+          <li>A <strong>full-stack ROS-based software architecture</strong> for teleoperation, data recording, and deployment of autonomous policies with a decoupled server–client inference architecture.</li>
+          <li><strong>Quantitative validation</strong> across phantom, <em>ex vivo</em>, and <em>in vivo</em> porcine laparoscopic procedures, demonstrating sub-millimeter RCM precision and trajectory smoothness comparable to established surgical robotics benchmarks.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BibTeX -->
 <section class="section" id="BibTeX">
-  <div class="container is-max-desktop content">
-    <h2 class="title">BibTeX</h2>
-    <pre><code>@article{park2021nerfies,
-  author    = {Park, Keunhong and Sinha, Utkarsh and Barron, Jonathan T. and Bouaziz, Sofien and Goldman, Dan B and Seitz, Steven M. and Martin-Brualla, Ricardo},
-  title     = {Nerfies: Deformable Neural Radiance Fields},
-  journal   = {ICCV},
-  year      = {2021},
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">BibTeX</h2>
+    <div class="section-divider"></div>
+    <div class="bibtex-section">
+      <pre><code>@inproceedings{anonymous2026rcm,
+  author    = {Anonymous},
+  title     = {An Open-Source Analytical Remote-Center-of-Motion Controller 
+               for Autonomous Surgical Robotics},
+  booktitle = {Under Review},
+  year      = {2026},
 }</code></pre>
+    </div>
   </div>
 </section>
 
-
+<!-- Footer -->
 <footer class="footer">
   <div class="container">
-    <div class="content has-text-centered">
-      <a class="icon-link"
-         href="./static/videos/nerfies_paper.pdf">
-        <i class="fas fa-file-pdf"></i>
-      </a>
-      <a class="icon-link" href="https://github.com/keunhong" class="external-link" disabled>
-        <i class="fab fa-github"></i>
-      </a>
-    </div>
     <div class="columns is-centered">
       <div class="column is-8">
-        <div class="content">
+        <div class="content has-text-centered">
           <p>
-            This website is licensed under a <a rel="license"
-                                                href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
-            Commons Attribution-ShareAlike 4.0 International License</a>.
-          </p>
-          <p>
-            This means you are free to borrow the <a
-              href="https://github.com/nerfies/nerfies.github.io">source code</a> of this website,
-            we just ask that you link back to this page in the footer.
-            Please remember to remove the analytics code included in the header of the website which
-            you do not want on your website.
+            This website template is borrowed from <a href="https://github.com/nerfies/nerfies.github.io">Nerfies</a>,
+            licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0</a> license.
           </p>
         </div>
       </div>
