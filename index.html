@@ -4,11 +4,11 @@
   <meta charset="utf-8">
   <meta name="description"
         content="An open-source, robot-agnostic Remote Center of Motion controller for autonomous surgical robotics, validated across phantom, ex vivo, and in vivo laparoscopic procedures.">
-  <meta name="keywords" content="Surgical Robotics, Remote Center of Motion, RCM, Imitation Learning, Autonomous Surgery, Laparoscopy, UR5e">
+  <meta name="keywords" content="Surgical Robotics, Remote Center of Motion, RCM, Imitation Learning, Autonomous Surgery, Laparoscopy, UR5e, ROS">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Open-Source Analytical RCM Controller for Autonomous Surgical Robotics</title>
+  <title>Open-Source Robotics Platform for Autonomous Laparoscopic Surgery</title>
 
-  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700;800&family=Noto+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
         rel="stylesheet">
 
   <link rel="icon" href="./static/images/favicon.svg" type="image/svg+xml">
@@ -16,517 +16,33 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
-
-  <style>
-    :root {
-      --primary: #0a6e5c;
-      --primary-light: #e8f5f1;
-      --accent: #d4563a;
-      --text: #2c3e50;
-      --text-light: #5a6c7d;
-      --bg-light: #f7faf9;
-      --bg-hero: #f0f7f5;
-    }
-
-    body {
-      font-family: 'Noto Sans', sans-serif;
-      color: var(--text);
-    }
-
-    .publication-title {
-      font-family: 'Google Sans', sans-serif;
-      font-weight: 700;
-      color: var(--text);
-      font-size: 2.2rem !important;
-      line-height: 1.25;
-    }
-
-    .publication-authors {
-      font-family: 'Noto Sans', sans-serif;
-    }
-
-    .publication-authors a {
-      color: var(--primary);
-    }
-
-    .publication-authors a:hover {
-      text-decoration: underline;
-    }
-
-    .publication-links .button {
-      margin: 4px;
-      border-color: #363636;
-    }
-
-    .hero-body-custom {
-      padding: 3rem 1.5rem 2rem;
-      background: var(--bg-hero);
-      border-bottom: 1px solid #e0ece8;
-    }
-
-    .section {
-      padding: 3rem 1.5rem;
-    }
-
-    .section-divider {
-      width: 60px;
-      height: 3px;
-      background: var(--primary);
-      margin: 0 auto 1.5rem;
-      border-radius: 2px;
-    }
-
-    h2.title.is-3 {
-      font-family: 'Google Sans', sans-serif;
-      color: var(--text);
-      font-weight: 600;
-    }
-
-    h3.title.is-4 {
-      font-family: 'Google Sans', sans-serif;
-      color: var(--text);
-      font-weight: 500;
-    }
-
-    .content p, .content li {
-      color: var(--text);
-      line-height: 1.75;
-    }
-
-    /* Teaser figure */
-    .teaser-figure {
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 8px 30px rgba(10, 110, 92, 0.1);
-      border: 1px solid #e0ece8;
-    }
-
-    .teaser-figure img,
-    .teaser-figure video {
-      width: 100%;
-      display: block;
-    }
-
-    .teaser-caption {
-      font-size: 0.95rem;
-      color: var(--text-light);
-      margin-top: 1rem;
-      text-align: center;
-      line-height: 1.6;
-    }
-
-    /* Environment cards */
-    .env-cards {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1.5rem;
-      margin: 2rem 0;
-    }
-
-    .env-card {
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-      border: 1px solid #e8ede8;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .env-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 8px 30px rgba(0,0,0,0.12);
-    }
-
-    .env-card .card-image {
-      width: 100%;
-      height: 220px;
-      background: #e0e0e0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #999;
-      font-size: 0.9rem;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .env-card .card-image.phantom { background: linear-gradient(135deg, #e8f5f1 0%, #d0ebe4 100%); }
-    .env-card .card-image.exvivo { background: linear-gradient(135deg, #fdf2e9 0%, #f5dcc3 100%); }
-    .env-card .card-image.invivo { background: linear-gradient(135deg, #fdecea 0%, #f5c6c2 100%); }
-
-    .env-card .card-image .placeholder-icon {
-      font-size: 3rem;
-      opacity: 0.3;
-    }
-
-    .env-card .card-body {
-      padding: 1.25rem;
-    }
-
-    .env-card .card-body h4 {
-      font-family: 'Google Sans', sans-serif;
-      font-weight: 600;
-      font-size: 1.05rem;
-      margin-bottom: 0.4rem;
-      color: var(--text);
-    }
-
-    .env-card .card-body p {
-      font-size: 0.88rem;
-      color: var(--text-light);
-      line-height: 1.5;
-    }
-
-    .env-label {
-      position: absolute;
-      top: 12px;
-      left: 12px;
-      background: rgba(255,255,255,0.92);
-      padding: 4px 12px;
-      border-radius: 20px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--text);
-      backdrop-filter: blur(4px);
-    }
-
-    /* Results figures */
-    .result-figure {
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
-      border: 1px solid #eee;
-      background: white;
-      padding: 1.5rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .result-figure img {
-      width: 100%;
-      display: block;
-    }
-
-    .result-figure .fig-caption {
-      font-size: 0.88rem;
-      color: var(--text-light);
-      margin-top: 1rem;
-      line-height: 1.6;
-      border-top: 1px solid #f0f0f0;
-      padding-top: 1rem;
-    }
-
-    .result-figure .fig-caption strong {
-      color: var(--text);
-    }
-
-    /* Method diagram */
-    .method-figure {
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
-      border: 1px solid #eee;
-      background: white;
-      padding: 1rem;
-    }
-
-    .method-figure img {
-      width: 100%;
-      display: block;
-    }
-
-    /* Control modes side by side */
-    .control-modes {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 2rem;
-      margin: 2rem 0;
-    }
-
-    .control-mode-card {
-      background: var(--bg-light);
-      border-radius: 12px;
-      padding: 2rem;
-      border: 1px solid #e0ece8;
-    }
-
-    .control-mode-card h4 {
-      font-family: 'Google Sans', sans-serif;
-      font-weight: 600;
-      font-size: 1.05rem;
-      margin-bottom: 0.75rem;
-      color: var(--primary);
-    }
-
-    .control-mode-card .dof-list {
-      font-size: 0.9rem;
-      color: var(--text-light);
-      line-height: 1.8;
-    }
-
-    .control-mode-card .dof-list code {
-      background: rgba(10,110,92,0.08);
-      padding: 2px 6px;
-      border-radius: 4px;
-      font-size: 0.85rem;
-      color: var(--primary);
-    }
-
-    .control-mode-card .video-placeholder {
-      width: 100%;
-      height: 180px;
-      background: #e8ede8;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-top: 1rem;
-      color: #999;
-      font-size: 0.85rem;
-    }
-
-    /* Metrics highlight */
-    .metrics-highlight {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1.5rem;
-      margin: 2rem 0;
-    }
-
-    .metric-card {
-      background: white;
-      border-radius: 12px;
-      padding: 1.5rem;
-      text-align: center;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.05);
-      border: 1px solid #eee;
-    }
-
-    .metric-card .metric-value {
-      font-family: 'Google Sans', sans-serif;
-      font-size: 2rem;
-      font-weight: 700;
-      color: var(--primary);
-      margin-bottom: 0.25rem;
-    }
-
-    .metric-card .metric-unit {
-      font-size: 0.85rem;
-      color: var(--text-light);
-      margin-bottom: 0.5rem;
-    }
-
-    .metric-card .metric-label {
-      font-size: 0.8rem;
-      color: var(--text-light);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    /* Video section */
-    .publication-video {
-      position: relative;
-      width: 100%;
-      padding-bottom: 56.25%;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.1);
-    }
-
-    .publication-video iframe {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      border: none;
-    }
-
-    .video-placeholder-large {
-      position: relative;
-      width: 100%;
-      padding-bottom: 56.25%;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.1);
-      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-    }
-
-    .video-placeholder-large .inner {
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      color: rgba(255,255,255,0.5);
-    }
-
-    .video-placeholder-large .inner i {
-      font-size: 3rem;
-      margin-bottom: 1rem;
-    }
-
-    /* Bibtex */
-    .bibtex-section pre {
-      background: #1a1a2e;
-      color: #a8d8c8;
-      border-radius: 10px;
-      padding: 1.5rem;
-      font-size: 0.85rem;
-      line-height: 1.6;
-      overflow-x: auto;
-    }
-
-    /* Footer */
-    .footer {
-      background: var(--bg-light);
-      border-top: 1px solid #e0ece8;
-      padding: 2rem 1.5rem;
-    }
-
-    .footer p {
-      color: var(--text-light);
-      font-size: 0.85rem;
-    }
-
-    .footer a {
-      color: var(--primary);
-    }
-
-    /* Navbar */
-    .navbar {
-      background: white;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-    }
-
-    .navbar-item {
-      font-family: 'Google Sans', sans-serif;
-      color: var(--text);
-    }
-
-    /* Contribution list */
-    .contribution-list {
-      list-style: none;
-      padding: 0;
-      margin: 1.5rem 0;
-    }
-
-    .contribution-list li {
-      position: relative;
-      padding-left: 2rem;
-      margin-bottom: 1rem;
-      line-height: 1.65;
-      font-size: 0.95rem;
-    }
-
-    .contribution-list li::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 8px;
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: var(--primary);
-    }
-
-    /* RCM geometry diagram placeholder */
-    .rcm-diagram {
-      width: 100%;
-      max-width: 500px;
-      margin: 2rem auto;
-      background: var(--bg-light);
-      border-radius: 12px;
-      border: 1px solid #e0ece8;
-      padding: 2rem;
-      text-align: center;
-    }
-
-    .rcm-diagram svg {
-      width: 100%;
-      max-width: 400px;
-    }
-
-    /* Responsive */
-    @media (max-width: 768px) {
-      .publication-title {
-        font-size: 1.5rem !important;
-      }
-      .env-cards {
-        grid-template-columns: 1fr;
-      }
-      .control-modes {
-        grid-template-columns: 1fr;
-      }
-      .metrics-highlight {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    /* Policy rollout carousel */
-    .rollout-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1.5rem;
-      margin: 2rem 0;
-    }
-
-    .rollout-card {
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-      border: 1px solid #eee;
-    }
-
-    .rollout-card .rollout-video {
-      width: 100%;
-      height: 200px;
-      background: #1a1a2e;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: rgba(255,255,255,0.4);
-    }
-
-    .rollout-card .rollout-info {
-      padding: 1rem;
-      background: white;
-    }
-
-    .rollout-card .rollout-info h5 {
-      font-family: 'Google Sans', sans-serif;
-      font-weight: 600;
-      font-size: 0.95rem;
-      margin-bottom: 0.25rem;
-    }
-
-    .rollout-card .rollout-info span {
-      font-size: 0.82rem;
-      color: var(--text-light);
-    }
-
-    @media (max-width: 768px) {
-      .rollout-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="./static/css/index.css">
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('.navbar-burger').forEach(function(el) {
+        el.addEventListener('click', function() {
+          el.classList.toggle('is-active');
+          var t = document.getElementById(el.dataset.target);
+          if (t) t.classList.toggle('is-active');
+        });
+      });
+    });
+  </script>
 </head>
 <body>
 
 <!-- Navbar -->
 <nav class="navbar" role="navigation" aria-label="main navigation">
   <div class="navbar-brand">
-    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navMenu">
       <span aria-hidden="true"></span>
       <span aria-hidden="true"></span>
       <span aria-hidden="true"></span>
     </a>
   </div>
-  <div class="navbar-menu">
+  <div id="navMenu" class="navbar-menu">
     <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
-      <!-- Add lab homepage link here -->
       <a class="navbar-item" href="#">
         <span class="icon"><i class="fas fa-home"></i></span>
       </a>
@@ -540,22 +56,22 @@
   </div>
 </nav>
 
-<!-- Hero / Title -->
+<!-- ==================== HERO ==================== -->
 <section class="hero">
-  <div class="hero-body hero-body-custom">
+  <div class="hero-body" style="padding: 3rem 1.5rem 2rem;">
     <div class="container is-max-desktop">
       <div class="columns is-centered">
         <div class="column has-text-centered">
           <h1 class="title is-1 publication-title">
-            An Open-Source Analytical Remote-Center-of-Motion Controller for Autonomous Surgical Robotics
+            An Open-Source Robotics Research Platform for Autonomous Laparoscopic Surgery
           </h1>
 
           <div class="is-size-5 publication-authors" style="margin-top:1rem;">
-            <span class="author-block" style="color: var(--text-light); font-style: italic;">Authors redacted for blind review</span>
+            <span class="author-block" style="color: var(--text-muted); font-style: italic;">Authors redacted for blind review</span>
           </div>
 
-          <div class="is-size-6 publication-authors" style="margin-top:0.5rem; color: var(--text-light);">
-            <span class="author-block" style="font-style: italic;">Affiliations redacted for blind review</span>
+          <div class="is-size-6 publication-authors" style="margin-top:0.5rem;">
+            <span class="author-block" style="color: var(--text-muted); font-style: italic;">Affiliations redacted for blind review</span>
           </div>
 
           <!-- Links -->
@@ -575,17 +91,10 @@
               </span>
               <span class="link-block">
                 <a href="#" class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon"><i class="fab fa-youtube"></i></span>
-                  <span>Video</span>
-                </a>
-              </span>
-              <span class="link-block">
-                <a href="#" class="external-link button is-normal is-rounded is-dark">
                   <span class="icon"><i class="fab fa-github"></i></span>
                   <span>Code</span>
                 </a>
               </span>
-
             </div>
           </div>
 
@@ -595,27 +104,23 @@
   </div>
 </section>
 
-<!-- Teaser -->
+<!-- ==================== TEASER ==================== -->
 <section class="hero teaser">
   <div class="container is-max-desktop" style="padding: 2rem 1.5rem;">
     <div class="teaser-figure">
-      <!-- Replace with actual teaser image: composite of phantom | ex vivo | in vivo setup -->
-      <div style="width:100%; height:400px; background: linear-gradient(135deg, #e8f5f1 0%, #d0ebe4 50%, #fdf2e9 100%); display:flex; align-items:center; justify-content:center; color:#999; font-size:0.95rem;">
-        <div style="text-align:center;">
-          <i class="fas fa-robot" style="font-size:4rem; opacity:0.2; display:block; margin-bottom:1rem;"></i>
-          Teaser figure: UR5e platform across phantom | <em>ex vivo</em> | <em>in vivo</em> environments
-        </div>
-      </div>
+      <video autoplay loop muted playsinline>
+        <source src="./static/videos/demo.mp4" type="video/mp4">
+      </video>
     </div>
     <p class="teaser-caption">
-      Our open-source surgical robotics platform built around industrial manipulators and an analytical RCM controller,
-      validated across <strong>phantom</strong>, <strong><em>ex vivo</em></strong>, and <strong><em>in vivo</em></strong> porcine laparoscopic procedures.
-      The controller operates in Cartesian space, enabling <em>any</em> industrial manipulator to function as a surgical robot.
+      <strong>System overview:</strong> the teleoperation interface consists of a haptic input device and a clutch pedal board,
+      combined with a Meta Quest headset providing immersive 3D perception. On the patient side, two UR5e robotic arms
+      control the surgical instrument and a stereoscopic endoscope capturing the surgical workspace.
     </p>
   </div>
 </section>
 
-<!-- Abstract -->
+<!-- ==================== ABSTRACT ==================== -->
 <section class="section">
   <div class="container is-max-desktop">
     <div class="columns is-centered has-text-centered">
@@ -627,10 +132,10 @@
             Autonomous robot-assisted surgery demands reliable, high-precision platforms that strictly adhere to the safety and kinematic constraints of minimally invasive procedures. Existing research platforms, primarily based on the da Vinci Research Kit, suffer from cable-driven mechanical limitations that degrade state-space consistency and hinder the downstream training of reliable autonomous policies.
           </p>
           <p>
-            We present an open-source, robot-agnostic Remote Center of Motion (RCM) controller based on a closed-form analytical velocity solver that enforces the trocar constraint deterministically without iterative optimization. The controller operates in Cartesian space, enabling any industrial manipulator to function as a surgical robot. We integrate it into a full-stack ROS-based surgical robotics platform supporting teleoperation, demonstration recording, and deployment of learned policies via a decoupled server–client architecture. We provide implementations for the UR5e and Franka Emika Panda manipulators, and integrate stereoscopic 3D perception.
+            We present an <strong>open-source, robot-agnostic Remote Center of Motion (RCM) controller</strong> based on a closed-form analytical velocity solver that enforces the trocar constraint deterministically without iterative optimization. The controller operates in Cartesian space, enabling any industrial manipulator to function as a surgical robot. We provide implementations for the <strong>UR5e</strong> and <strong>Franka Emika Panda</strong> manipulators, and integrate stereoscopic 3D perception. We integrate the robot control into a full-stack <strong>ROS-based</strong> surgical robotics platform supporting teleoperation, demonstration recording, and deployment of learned policies via a decoupled server&ndash;client architecture.
           </p>
           <p>
-            We validate the system on a bowel grasping and retraction task across phantom, <em>ex vivo</em>, and <em>in vivo</em> porcine laparoscopic procedures. RCM deviations remain sub-millimeter across all conditions, and trajectory smoothness metrics (SPARC, LDLJ) are comparable to expert demonstrations from the JIGSAWS benchmark recorded on the da Vinci system. These results demonstrate that the platform provides the precision and robustness required for teleoperation, data collection and autonomous policy deployment in realistic surgical scenarios.
+            We validate the system on a bowel grasping and retraction task across <strong>phantom</strong>, <strong><em>ex vivo</em></strong>, and <strong><em>in vivo</em></strong> porcine laparoscopic procedures. RCM deviations remain sub-millimeter across all conditions, and trajectory smoothness metrics (SPARC, LDLJ) are comparable to expert demonstrations from the JIGSAWS benchmark recorded on the da Vinci system. These results demonstrate that the platform provides the precision and robustness required for teleoperation, data collection and autonomous policy deployment in realistic surgical scenarios.
           </p>
         </div>
       </div>
@@ -638,164 +143,185 @@
   </div>
 </section>
 
-<!-- Video -->
-<section class="section" style="background: var(--bg-light);">
-  <div class="container is-max-desktop">
-    <div class="columns is-centered has-text-centered">
-      <div class="column is-four-fifths">
-        <h2 class="title is-3">Video</h2>
-        <div class="section-divider"></div>
-        <div class="video-placeholder-large">
-          <div class="inner">
-            <i class="fas fa-play-circle"></i>
-            <span>Platform demo video coming soon</span>
-          </div>
-        </div>
-        <!-- Replace with actual video embed:
-        <div class="publication-video">
-          <iframe src="https://www.youtube.com/embed/YOUR_VIDEO_ID?rel=0&showinfo=0"
-                  frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-        </div>
-        -->
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- System Overview / Architecture -->
-<section class="section">
+<!-- ==================== SYSTEM ARCHITECTURE ==================== -->
+<section class="section alt-bg">
   <div class="container is-max-desktop">
     <h2 class="title is-3 has-text-centered">System Architecture</h2>
     <div class="section-divider"></div>
 
     <div class="method-figure">
-      <!-- Replace with actual system overview figure -->
-      <div style="width:100%; height:350px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); display:flex; align-items:center; justify-content:center; color:#999; font-size:0.9rem; border-radius:8px;">
-        <div style="text-align:center;">
-          <i class="fas fa-project-diagram" style="font-size:3rem; opacity:0.2; display:block; margin-bottom:1rem;"></i>
-          System overview figure (Fig. 1): ROS architecture with teleoperation, recording, and policy deployment modules
-        </div>
-      </div>
+      <img src="./static/images/framework_overview.png" alt="System architecture overview showing ROS-based modular platform">
     </div>
-    <p style="font-size:0.9rem; color:var(--text-light); text-align:center; margin-top:1rem; line-height:1.6;">
-      <strong>Figure 1.</strong> Full-stack ROS-based architecture. The modular design decouples input devices, the RCM controller, data recording, and policy inference, allowing each component to be independently replaced or extended.
+    <p class="caption" style="margin-top:1rem; max-width: 90%; margin-left:auto; margin-right:auto;">
+      The platform is built with modularity at its core, with inter-component communication abstracted through ROS topics.
+      In teleoperation mode, the operator's input device supplies target commands to the RCM controller, while stereoscopic visualization is rendered through the Meta Quest headset.
+      During policy deployment, the control signal is generated by the learned model via a ZMQ-based server&ndash;client architecture, keeping model inference cleanly decoupled from the system.
     </p>
 
     <div class="content has-text-justified" style="margin-top:2rem;">
       <p>
-        The platform is built on the Robot Operating System (ROS), decomposing the control software into independent nodes for teleoperation, robot control, data recording, and policy inference. The RCM controller operates entirely in Cartesian space, making it agnostic to the specific manipulator hardware—any robot arm capable of executing Cartesian velocity commands can be used. We currently provide implementations for the <strong>Universal Robots UR5e</strong> and <strong>Franka Emika Panda</strong>.
-      </p>
-      <p>
-        For policy deployment, inference is decoupled from ROS using a <strong>ZMQ-based server–client architecture</strong>. A model server aggregates observations, forwards them to the policy, and relays predicted actions back through a safety controller. This design is environment-agnostic: any imitation learning or reinforcement learning policy can serve as the client, enabling rollouts across hardware and simulation without modifying the infrastructure.
+        The RCM-constrained robot controller operates in Cartesian space and is therefore <strong>agnostic to the specific hardware</strong>. Any robot arm capable of executing Cartesian velocity commands can be used. For policy deployment, inference is decoupled from ROS using a <strong>ZMQ-based server&ndash;client architecture</strong>. A model server aggregates observations, forwards them to the policy, and relays predicted actions back through a safety controller. This design enables rollouts across hardware and simulation environments without modifying the infrastructure.
       </p>
     </div>
   </div>
 </section>
 
-<!-- RCM Controller -->
-<section class="section" style="background: var(--bg-light);">
+<!-- ==================== RCM CONTROLLER ==================== -->
+<section class="section">
   <div class="container is-max-desktop">
     <h2 class="title is-3 has-text-centered">Analytical RCM Controller</h2>
     <div class="section-divider"></div>
 
-    <div class="content has-text-justified">
-      <p>
-        The Remote Center of Motion (RCM) constraint requires that the instrument shaft always pivots about a fixed point at the trocar insertion site. Unlike optimization-based approaches (e.g., Quadratic Programming), our controller enforces this constraint analytically via closed-form vector algebra, yielding deterministic, smooth velocity profiles without iterative solvers.
-      </p>
+    <div class="columns is-centered" style="margin-bottom:1.5rem;">
+      <div class="column is-half">
+        <div class="content has-text-justified">
+          <p>
+            The Remote Center of Motion (RCM) constraint requires that the instrument shaft always pivots about a fixed point at the trocar insertion site. Unlike optimization-based approaches (e.g., Quadratic Programming), our controller enforces this constraint <strong>analytically via closed-form vector algebra</strong>, yielding deterministic, smooth velocity profiles without iterative solvers.
+          </p>
+          <p>
+            We provide two complementary control strategies: <strong>Cartesian Tip Velocity Control</strong> for intuitive teleoperation and policy deployment, and <strong>Spherical Coordinate Control</strong> that directly maps to the surgical degrees of freedom.
+          </p>
+        </div>
+      </div>
+      <div class="column is-half has-text-centered">
+        <div class="img-card">
+          <img src="./static/images/sketch_rcm.png" alt="RCM geometry showing instrument vectors and control variables" style="max-width: 320px; margin: 0 auto; display: block;">
+        </div>
+        <p class="caption">RCM geometry: spherical (pitch, yaw, roll, translation) and Cartesian tip velocity control, with all vectors in the robot base frame.</p>
+      </div>
     </div>
 
-    <!-- RCM Geometry Diagram -->
-    <div class="rcm-diagram">
-      <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-        <!-- Robot arm (simplified) -->
-        <line x1="50" y1="280" x2="120" y2="200" stroke="#ccc" stroke-width="8" stroke-linecap="round"/>
-        <line x1="120" y1="200" x2="200" y2="140" stroke="#ccc" stroke-width="8" stroke-linecap="round"/>
-
-        <!-- End effector -->
-        <circle cx="200" cy="140" r="8" fill="var(--primary)" opacity="0.8"/>
-        <text x="215" y="138" font-size="12" fill="var(--text-light)" font-family="Google Sans">p_ee</text>
-
-        <!-- Shaft line through RCM -->
-        <line x1="200" y1="140" x2="300" y2="50" stroke="var(--accent)" stroke-width="3" stroke-dasharray="6,3"/>
-
-        <!-- RCM point -->
-        <circle cx="240" cy="102" r="10" fill="none" stroke="var(--accent)" stroke-width="2.5"/>
-        <circle cx="240" cy="102" r="3" fill="var(--accent)"/>
-        <text x="255" y="100" font-size="12" fill="var(--accent)" font-weight="600" font-family="Google Sans">RCM</text>
-
-        <!-- Trocar / body wall -->
-        <rect x="220" y="88" width="40" height="8" rx="2" fill="#ddd" opacity="0.6" transform="rotate(-35, 240, 92)"/>
-
-        <!-- Tip -->
-        <circle cx="300" cy="50" r="6" fill="var(--primary)"/>
-        <text x="310" y="53" font-size="12" fill="var(--text-light)" font-family="Google Sans">p_tip</text>
-
-        <!-- Vectors -->
-        <defs>
-          <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
-            <polygon points="0 0, 8 3, 0 6" fill="var(--primary)"/>
-          </marker>
-        </defs>
-
-        <!-- r_ee vector -->
-        <line x1="200" y1="140" x2="235" y2="107" stroke="var(--primary)" stroke-width="1.5" marker-end="url(#arrowhead)" opacity="0.6"/>
-        <text x="195" y="120" font-size="10" fill="var(--primary)" font-family="Google Sans" font-style="italic">r_ee</text>
-
-        <!-- r_shaft vector -->
-        <line x1="240" y1="102" x2="293" y2="56" stroke="var(--primary)" stroke-width="1.5" marker-end="url(#arrowhead)" opacity="0.6"/>
-        <text x="275" y="85" font-size="10" fill="var(--primary)" font-family="Google Sans" font-style="italic">r_shaft</text>
-
-        <!-- Pivot arc -->
-        <path d="M 280 70 A 50 50 0 0 1 260 55" fill="none" stroke="var(--text-light)" stroke-width="1" stroke-dasharray="3,2"/>
-        <text x="275" y="44" font-size="9" fill="var(--text-light)" font-family="Google Sans">ω_pivot</text>
-
-        <!-- Legend -->
-        <text x="50" y="25" font-size="11" fill="var(--text)" font-family="Google Sans" font-weight="600">RCM Geometry</text>
-      </svg>
+    <!-- RCM overlap video -->
+    <div class="columns is-centered" style="margin-top: 1rem;">
+      <div class="column is-8">
+        <div class="video-card">
+          <video autoplay loop muted playsinline>
+            <source src="./static/videos/rcm_overlap.mp4" type="video/mp4">
+          </video>
+          <div class="video-info">
+            <h5>RCM Constraint Maintenance</h5>
+            <span>The RCM point remains fixed while the controller freely moves the instrument tip.</span>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <!-- Two control modes -->
+    <!-- Two control modes with videos -->
+    <h3 class="title is-4 has-text-centered" style="margin-top: 2.5rem;">Control Modalities</h3>
     <div class="control-modes">
       <div class="control-mode-card">
-        <h4><i class="fas fa-arrows-alt" style="margin-right:0.5rem;"></i>Cartesian Tip Control</h4>
-        <div class="dof-list">
-          Input: desired tip velocity <code>v_tip</code> + shaft roll <code>ω_roll</code><br><br>
-          Moves the instrument tip in 3D Cartesian space inside the patient body while maintaining the RCM constraint. Ideal for teleoperation and policy deployment.
-        </div>
-        <div class="video-placeholder">
-          <i class="fas fa-play-circle" style="margin-right:0.5rem;"></i> Animation placeholder
+        <video autoplay loop muted playsinline>
+          <source src="./static/videos/tip_position_control.mp4" type="video/mp4">
+        </video>
+        <div class="mode-info">
+          <h4><i class="fas fa-arrows-alt" style="margin-right:0.5rem;"></i>Cartesian Tip Control</h4>
+          <p>Input: desired tip velocity <code>v_tip</code> + shaft roll <code>&omega;_roll</code>. Moves the instrument tip in 3D Cartesian space inside the patient body while maintaining the RCM constraint.</p>
         </div>
       </div>
       <div class="control-mode-card">
-        <h4><i class="fas fa-compass" style="margin-right:0.5rem;"></i>Spherical Coordinate Control</h4>
-        <div class="dof-list">
-          Input: <code>ω_pitch</code>, <code>ω_yaw</code>, <code>ω_roll</code>, <code>v_trans</code><br><br>
-          Directly maps to the surgical degrees of freedom: up/down pivoting, left/right pivoting, instrument roll, and insertion depth.
-        </div>
-        <div class="video-placeholder">
-          <i class="fas fa-play-circle" style="margin-right:0.5rem;"></i> Animation placeholder
+        <video autoplay loop muted playsinline>
+          <source src="./static/videos/rpy+translation_control.mp4" type="video/mp4">
+        </video>
+        <div class="mode-info">
+          <h4><i class="fas fa-compass" style="margin-right:0.5rem;"></i>Spherical Coordinate Control</h4>
+          <p>Input: <code>&omega;_pitch</code>, <code>&omega;_yaw</code>, <code>&omega;_roll</code>, <code>v_trans</code>. Directly maps to the surgical degrees of freedom: pivoting, roll, and insertion depth.</p>
         </div>
       </div>
     </div>
 
+    <!-- Roll video -->
+    <div class="columns is-centered" style="margin-top: 1rem;">
+      <div class="column is-6">
+        <div class="video-card">
+          <video autoplay loop muted playsinline>
+            <source src="./static/videos/roll.mp4" type="video/mp4">
+          </video>
+          <div class="video-info">
+            <h5>Instrument Roll</h5>
+            <span>The controller rotates the instrument about its shaft axis while maintaining the RCM constraint.</span>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
-<!-- Experimental Environments -->
+<!-- ==================== 3D PERCEPTION ==================== -->
+<section class="section alt-bg">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Immersive 3D Perception</h2>
+    <div class="section-divider"></div>
+
+    <div class="columns is-vcentered">
+      <div class="column is-half">
+        <div class="content has-text-justified">
+          <p>
+            The system employs a <strong>TIPCAM1 S 3D</strong> stereo endoscope mounted on a second robotic arm to provide stereoscopic visualization. The stereo video feed is displayed on either a 3D monitor or a <strong>Meta Quest headset</strong> via Endomersion, enabling depth perception during task execution and demonstration recording.
+          </p>
+          <p>
+            The camera frame is determined using the forward kinematics of the camera-holding arm combined with a measured offset from its end-effector to the endoscope tip. Since the transformation between the two robot bases is known, instrument commands are transformed from the camera frame to the instrument robot frame, ensuring natural and intuitive teleoperation regardless of viewing angle.
+          </p>
+        </div>
+      </div>
+      <div class="column is-half">
+        <div class="img-card">
+          <img src="./static/images/endomersion.jpg" alt="Endomersion immersive 3D visualization through Meta Quest headset">
+        </div>
+        <p class="caption">Immersive stereoscopic visualization through the Meta Quest headset running Endomersion, showing the surgical workspace captured by the endoscope.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== TESTBED SETUP ==================== -->
 <section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Hardware Setup</h2>
+    <div class="section-divider"></div>
+
+    <div class="columns is-vcentered">
+      <div class="column is-5 has-text-centered">
+        <div class="img-card">
+          <img src="./static/images/testbed_picture.png" alt="Full testbed setup with labeled components">
+        </div>
+      </div>
+      <div class="column is-7">
+        <div class="content">
+          <p>
+            The platform consists of two <strong>UR5e robotic arms</strong>&mdash;one for controlling the surgical instrument and the other for a stereoscopic endoscope&mdash;combined with:
+          </p>
+          <ul>
+            <li><strong>Lambda.7 haptic device</strong> (Force Dimension) for teleoperation input</li>
+            <li><strong>Meta Quest headset</strong> for immersive 3D visualization</li>
+            <li><strong>TIPCAM1 S 3D</strong> stereo endoscope (Karl Storz)</li>
+            <li><strong>Clutch pedal board</strong> for gripper and clutch control</li>
+          </ul>
+          <p>
+            Input devices and endoscope nodes may run on separate machines connected via ROS, allowing operators to control the robot from a remote workstation. Clocks are synchronized using Precision Time Protocol (PTP).
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== EXPERIMENTAL ENVIRONMENTS ==================== -->
+<section class="section alt-bg">
   <div class="container is-max-desktop">
     <h2 class="title is-3 has-text-centered">Experimental Environments</h2>
     <div class="section-divider"></div>
 
-    <p class="has-text-centered" style="color: var(--text-light); margin-bottom: 1.5rem;">
+    <p class="has-text-centered" style="color: var(--text-secondary); margin-bottom: 1.5rem;">
       We validate the platform across three increasingly realistic laparoscopic environments on a bowel grasping and retraction task.
     </p>
 
     <div class="env-cards">
       <div class="env-card">
-        <div class="card-image phantom">
+        <div style="position:relative;">
+          <video autoplay loop muted playsinline style="width:100%; height:220px; object-fit:cover;">
+            <source src="./static/videos/phantom_view.mp4" type="video/mp4">
+          </video>
           <span class="env-label">Phantom</span>
-          <i class="fas fa-cube placeholder-icon"></i>
         </div>
         <div class="card-body">
           <h4>Phantom Tissue</h4>
@@ -803,9 +329,11 @@
         </div>
       </div>
       <div class="env-card">
-        <div class="card-image exvivo">
+        <div style="position:relative;">
+          <video autoplay loop muted playsinline style="width:100%; height:220px; object-fit:cover;">
+            <source src="./static/videos/exvivo_endoscopeview.mp4" type="video/mp4">
+          </video>
           <span class="env-label">Ex Vivo</span>
-          <i class="fas fa-hand-holding-medical placeholder-icon"></i>
         </div>
         <div class="card-body">
           <h4><em>Ex Vivo</em> Porcine</h4>
@@ -813,21 +341,83 @@
         </div>
       </div>
       <div class="env-card">
-        <div class="card-image invivo">
+        <div style="position:relative;">
+          <video autoplay loop muted playsinline style="width:100%; height:220px; object-fit:cover;">
+            <source src="./static/videos/invivo_endoscopeview.mp4" type="video/mp4">
+          </video>
           <span class="env-label">In Vivo</span>
-          <i class="fas fa-heartbeat placeholder-icon"></i>
         </div>
         <div class="card-body">
           <h4><em>In Vivo</em> Porcine</h4>
-          <p>Live porcine laparoscopic procedures with full physiological conditions including breathing motion and tissue bleeding.</p>
+          <p>Live porcine laparoscopic procedures with full physiological conditions including breathing motion and tissue compliance.</p>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Key Results / Metrics -->
-<section class="section" style="background: var(--bg-light);">
+<!-- ==================== DATASET GALLERY ==================== -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Collected Datasets</h2>
+    <div class="section-divider"></div>
+
+    <p class="has-text-centered" style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+      The platform enables collection of diverse surgical task datasets. Below are examples of tasks recorded using our system.
+    </p>
+
+    <div class="video-grid-3">
+      <div class="video-card">
+        <video autoplay loop muted playsinline>
+          <source src="./static/videos/needledriving.mp4" type="video/mp4">
+        </video>
+        <div class="video-info">
+          <h5>Needle Driving</h5>
+        </div>
+      </div>
+      <div class="video-card">
+        <video autoplay loop muted playsinline>
+          <source src="./static/videos/pick_and_place.mp4" type="video/mp4">
+        </video>
+        <div class="video-info">
+          <h5>Pick and Place</h5>
+        </div>
+      </div>
+      <div class="video-card">
+        <video autoplay loop muted playsinline>
+          <source src="./static/videos/threadinhole.mp4" type="video/mp4">
+        </video>
+        <div class="video-info">
+          <h5>Thread in Hole</h5>
+        </div>
+      </div>
+    </div>
+
+    <div class="video-grid-2">
+      <div class="video-card">
+        <video autoplay loop muted playsinline>
+          <source src="./static/videos/endoscope_guidance_phantom.mp4" type="video/mp4">
+        </video>
+        <div class="video-info">
+          <h5>Endoscope Guidance</h5>
+          <span>Phantom &mdash; Camera controlled directly via RCM controller</span>
+        </div>
+      </div>
+      <div class="video-card">
+        <video autoplay loop muted playsinline>
+          <source src="./static/videos/endoscope_guidance_invivo.mp4" type="video/mp4">
+        </video>
+        <div class="video-info">
+          <h5>Endoscope Guidance</h5>
+          <span><em>In vivo</em> &mdash; Camera controlled directly via RCM controller</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== KEY RESULTS ==================== -->
+<section class="section alt-bg">
   <div class="container is-max-desktop">
     <h2 class="title is-3 has-text-centered">Key Results</h2>
     <div class="section-divider"></div>
@@ -835,17 +425,17 @@
     <!-- Metrics cards -->
     <div class="metrics-highlight">
       <div class="metric-card">
-        <div class="metric-value">&lt;0.08</div>
+        <div class="metric-value">&lt; 0.08</div>
         <div class="metric-unit">mm median RCM deviation</div>
         <div class="metric-label">Sub-millimeter precision across all conditions</div>
       </div>
       <div class="metric-card">
-        <div class="metric-value">3</div>
-        <div class="metric-unit">environments validated</div>
-        <div class="metric-label">Phantom · Ex Vivo · In Vivo</div>
+        <div class="metric-value">85%</div>
+        <div class="metric-unit">autonomous policy success rate</div>
+        <div class="metric-label">17/20 rollouts on bowel grasping task</div>
       </div>
       <div class="metric-card">
-        <div class="metric-value">≥ dVRK</div>
+        <div class="metric-value">&asymp; dVRK</div>
         <div class="metric-unit">smoothness metrics</div>
         <div class="metric-label">Comparable to JIGSAWS da Vinci benchmark</div>
       </div>
@@ -853,77 +443,24 @@
 
     <!-- RCM Deviation -->
     <div class="result-figure" style="margin-top:2rem;">
-      <img src="./static/images/rcm_deviation.png" alt="RCM deviation across experimental conditions" style="width:100%; border-radius:8px;">
+      <img src="./static/images/rcm_deviation.png" alt="RCM deviation across experimental conditions">
       <div class="fig-caption">
-        <strong>Figure 2.</strong> Remote Center of Motion deviation across experimental conditions. Mean deviation (left) and worst-case maximum deviation (right) remain sub-millimeter across all conditions, with phantom (x̃=0.035 mm), <em>ex vivo</em> (x̃=0.052 mm), and <em>in vivo</em> (x̃=0.079 mm) showing a progressive increase consistent with greater tissue interaction complexity.
+        <strong>RCM Deviation.</strong> Mean deviation (left) and worst-case maximum deviation (right) remain sub-millimeter across all conditions, with phantom (x&#x0303; = 0.035 mm), <em>ex vivo</em> (x&#x0303; = 0.052 mm), and <em>in vivo</em> (x&#x0303; = 0.079 mm) showing a progressive increase consistent with trocar pressure on the abdominal wall during <em>in vivo</em> procedures.
       </div>
     </div>
 
     <!-- Smoothness -->
     <div class="result-figure">
-      <img src="./static/images/smoothness_comparison.png" alt="Trajectory smoothness comparison" style="width:100%; border-radius:8px;">
+      <img src="./static/images/smoothness_comparison.png" alt="Trajectory smoothness comparison">
       <div class="fig-caption">
-        <strong>Figure 3.</strong> Trajectory smoothness comparison using SPARC (left) and Log Dimensionless Jerk (right) metrics, where values closer to zero indicate smoother motion. Our platform produces progressively less smooth trajectories from phantom to <em>in vivo</em>, consistent with increasing task difficulty. All three conditions yield smoother trajectories than expert demonstrations from the JIGSAWS Knot Tying benchmark recorded on the da Vinci system.
+        <strong>Trajectory Smoothness.</strong> SPARC (left) and Log Dimensionless Jerk (right) metrics, where values closer to zero indicate smoother motion. Our platform produces progressively less smooth trajectories from phantom to <em>in vivo</em>, consistent with increasing task difficulty. All three conditions yield smoother trajectories than expert demonstrations from the JIGSAWS Knot Tying benchmark recorded on the da Vinci system. All signals downsampled to 5 Hz for fair comparison.
       </div>
     </div>
   </div>
 </section>
 
-<!-- Policy Rollouts -->
+<!-- ==================== CONTRIBUTIONS ==================== -->
 <section class="section">
-  <div class="container is-max-desktop">
-    <h2 class="title is-3 has-text-centered">Autonomous Policy Rollouts</h2>
-    <div class="section-divider"></div>
-
-    <div class="content has-text-justified">
-      <p>
-        We validate the full pipeline by training downstream imitation learning policies (Action Chunking Transformer) on demonstrations collected with our platform and deploying them autonomously across all three environments. The decoupled server–client architecture enables seamless rollouts with a safety controller validating all predicted actions before execution.
-      </p>
-    </div>
-
-    <div class="rollout-grid">
-      <div class="rollout-card">
-        <div class="rollout-video">
-          <i class="fas fa-play-circle" style="font-size:2rem;"></i>
-        </div>
-        <div class="rollout-info">
-          <h5>Bowel Grasping &amp; Retraction</h5>
-          <span>Phantom — Autonomous rollout</span>
-        </div>
-      </div>
-      <div class="rollout-card">
-        <div class="rollout-video">
-          <i class="fas fa-play-circle" style="font-size:2rem;"></i>
-        </div>
-        <div class="rollout-info">
-          <h5>Bowel Grasping &amp; Retraction</h5>
-          <span><em>Ex vivo</em> — Autonomous rollout</span>
-        </div>
-      </div>
-      <div class="rollout-card">
-        <div class="rollout-video">
-          <i class="fas fa-play-circle" style="font-size:2rem;"></i>
-        </div>
-        <div class="rollout-info">
-          <h5>Bowel Grasping &amp; Retraction</h5>
-          <span><em>In vivo</em> — Autonomous rollout</span>
-        </div>
-      </div>
-      <div class="rollout-card">
-        <div class="rollout-video">
-          <i class="fas fa-play-circle" style="font-size:2rem;"></i>
-        </div>
-        <div class="rollout-info">
-          <h5>Teleoperation Demo</h5>
-          <span>Haptic device control with 3D perception</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Contributions Summary -->
-<section class="section" style="background: var(--bg-light);">
   <div class="container is-max-desktop">
     <div class="columns is-centered">
       <div class="column is-four-fifths">
@@ -931,7 +468,7 @@
         <div class="section-divider"></div>
         <ul class="contribution-list">
           <li>An <strong>open-source, robot-agnostic RCM controller</strong> based on a closed-form analytical solver that enforces kinematic constraints via Cartesian velocities, ensuring deterministic execution without iterative optimization.</li>
-          <li>A <strong>full-stack ROS-based software architecture</strong> for teleoperation, data recording, and deployment of autonomous policies with a decoupled server–client inference architecture.</li>
+          <li>A <strong>full-stack ROS-based software architecture</strong> for teleoperation, data recording, and deployment of autonomous policies with a decoupled server&ndash;client inference architecture.</li>
           <li><strong>Quantitative validation</strong> across phantom, <em>ex vivo</em>, and <em>in vivo</em> porcine laparoscopic procedures, demonstrating sub-millimeter RCM precision and trajectory smoothness comparable to established surgical robotics benchmarks.</li>
         </ul>
       </div>
@@ -939,16 +476,16 @@
   </div>
 </section>
 
-<!-- BibTeX -->
-<section class="section" id="BibTeX">
+<!-- ==================== BIBTEX ==================== -->
+<section class="section alt-bg" id="BibTeX">
   <div class="container is-max-desktop">
     <h2 class="title is-3 has-text-centered">BibTeX</h2>
     <div class="section-divider"></div>
     <div class="bibtex-section">
-      <pre><code>@inproceedings{anonymous2026rcm,
+      <pre><code>@inproceedings{anonymous2026surgical,
   author    = {Anonymous},
-  title     = {An Open-Source Analytical Remote-Center-of-Motion Controller 
-               for Autonomous Surgical Robotics},
+  title     = {An Open-Source Robotics Research Platform
+               for Autonomous Laparoscopic Surgery},
   booktitle = {Under Review},
   year      = {2026},
 }</code></pre>
@@ -956,16 +493,13 @@
   </div>
 </section>
 
-<!-- Footer -->
+<!-- ==================== FOOTER ==================== -->
 <footer class="footer">
   <div class="container">
     <div class="columns is-centered">
       <div class="column is-8">
         <div class="content has-text-centered">
-          <p>
-            This website template is borrowed from <a href="https://github.com/nerfies/nerfies.github.io">Nerfies</a>,
-            licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0</a> license.
-          </p>
+          <p></p>
         </div>
       </div>
     </div>
